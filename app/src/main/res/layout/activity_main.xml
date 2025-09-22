@@ -11,6 +11,8 @@
         android:id="@+id/api_response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Breed: -"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/image_result"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,5 +25,15 @@
         app:layout_constraintTop_toBottomOf="@id/api_response"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@+id/btn_next" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Cat"
+        app:layout_constraintTop_toBottomOf="@id/image_result"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.lab_week_05
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -39,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.image_result)
     }
 
+    // Button reference
+    private val nextButton: Button by lazy {
+        findViewById(R.id.btn_next)
+    }
+
     // GlideLoader instance
     private val imageLoader: ImageLoader by lazy {
         GlideLoader(this)
@@ -49,8 +55,13 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Panggil API
+        // Panggil API saat pertama kali
         getCatImageResponse()
+
+        // Refresh gambar kucing kalau button ditekan
+        nextButton.setOnClickListener {
+            getCatImageResponse()
+        }
     }
 
     private fun getCatImageResponse() {
@@ -66,18 +77,26 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val image = response.body()
-                    val firstImage = image?.firstOrNull()?.imageUrl.orEmpty()
+                    val firstImage = image?.firstOrNull()
 
-                    if (firstImage.isNotBlank()) {
-                        // Load image ke ImageView pakai Glide
-                        imageLoader.loadImage(firstImage, imageResultView)
+                    // Ambil URL gambar
+                    val imageUrl = firstImage?.imageUrl.orEmpty()
+
+                    // Ambil nama breed, kalau kosong → Unknown
+                    val breedName = if (!firstImage?.breeds.isNullOrEmpty()) {
+                        firstImage?.breeds?.firstOrNull()?.name ?: "Unknown"
                     } else {
-                        Log.d(MAIN_ACTIVITY, "Missing image URL")
+                        "Unknown"
                     }
 
-                    // Tampilkan URL juga ke TextView
+                    // Tampilkan breed name ke TextView
                     apiResponseView.text =
-                        getString(R.string.image_placeholder, firstImage)
+                        getString(R.string.image_placeholder, breedName)
+
+                    // Tampilkan gambar kucing ke ImageView pakai Glide
+                    if (imageUrl.isNotBlank()) {
+                        imageLoader.loadImage(imageUrl, imageResultView)
+                    }
                 } else {
                     Log.e(
                         MAIN_ACTIVITY,
